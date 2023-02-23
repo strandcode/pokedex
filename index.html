@@ -14,35 +14,69 @@
   <script>
     let currentPokemon;
     async function loadPokemon() {
-      let url = 'https://pokeapi.co/api/v2/pokemon/ditto'
+      let url = 'https://pokeapi.co/api/v2/pokemon/bulbasaur'
       let response = await fetch(url);
       currentPokemon = await response.json();
       console.log('Loaded pokemon: ', currentPokemon);
       renderpokemonInfo();
     }
 
+    async function loadPokemonAbilities() {
+      let url = 'https://pokeapi.co/api/v2/ability/bulbasaur'
+      let response = await fetch(url);
+      currentPokemonAbilities = await response.json();
+      console.log('Loaded pokemon: ', currentPokemonAbilities);
+      renderpokemonInfo();
+    }
+
+
+    function upperCaseFirstChar(word) {
+      const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
+      return capitalizedWord;
+    }
+
+
     function renderpokemonInfo() {
-      document.getElementById('pokemonName').innerHTML = currentPokemon.name;
+      document.getElementById('pokemonName').innerHTML = upperCaseFirstChar(currentPokemon.name);
       document.getElementById('spritesFrontDefault').src = currentPokemon.sprites.front_default;
       document.getElementById('spritesFrontShiny').src = currentPokemon.sprites.front_shiny;
       document.getElementById('spritesBackDefault').src = currentPokemon.sprites.back_default;
       document.getElementById('spritesBackShiny').src = currentPokemon.sprites.back_shiny;
+      document.getElementById('spritesBackShiny').src = currentPokemon.sprites.back_shiny;
+    }
+    function renderPokemonAbilities() {
+      let pokemonAbilities = document.getElementById('pokemonAbilities');
+      for (let i = 0; i < currentPokemon.abilities.length; i++) {
+        pokemonAbilities.innerHTML += `
+        <div>${upperCaseFirstChar(currentPokemon.abilities[i].ability.name)}</div>
+        `;
+
+
+      }
+
 
     }
+
   </script>
 
 </head>
 
 <body onload="loadPokemon()">
-  <div class="pokemon-wrapper">
-    <h1 id="pokemonName">Name</h1>
+  <div class="pokemon-card-wrapper">
+    <div class="pokemon-card-header">
+      <h1 id="pokemonName">Name</h1>
+      <div id="pokemonAbilities">
+
+      </div>
+
+    </div>
 
     <div class="pokemon-sprites-wrapper">
 
       <img id="spritesFrontDefault" src="" alt="Front default">
-      <img id="spritesFrontShiny" src="" alt="Front default">
+      <!-- <img id="spritesFrontShiny" src="" alt="Front default">
       <img id="spritesBackDefault" src="" alt="Front default">
-      <img id="spritesBackShiny" src="" alt="Front default">
+      <img id="spritesBackShiny" src="" alt="Front default"> -->
     </div>
   </div>
 </body>

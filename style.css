@@ -1,25 +1,37 @@
+html {
+  --poke-orange: #fc6c6d;
+  --poke-green: #49d0b1;
+}
+
+
 body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
 }
 
-#pokedex {}
-
-#pokedex img {
-  object-fit: contain;
-  background-color: green;
-}
-
-.pokemon-wrapper {
+.pokemon-card-wrapper {
   min-height: 50vh;
-  background-color: rgb(83, 21, 21);
+  width: 300px;
+  background-color: var(--poke-orange);
   color: white;
   display: flex;
   flex-direction: column;
+}
+
+.pokemon-card-header {
+  padding: 15px;
+  height: 150px;
 }
 
 .pokemon-sprites-wrapper {
   background-color: white;
   border-radius: 10px;
   display: flex;
+}
+
+
+
+.pokemon-sprites-wrapper img {
+  object-fit: contain;
+  background-color: var(--poke-green);
 }
