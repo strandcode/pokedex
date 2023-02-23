@@ -1,0 +1,50 @@
+<!-- LINK https://pokeapi.co/ -->
+
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Pokedex</title>
+
+  <script>
+    let currentPokemon;
+    async function loadPokemon() {
+      let url = 'https://pokeapi.co/api/v2/pokemon/ditto'
+      let response = await fetch(url);
+      currentPokemon = await response.json();
+      console.log('Loaded pokemon: ', currentPokemon);
+      renderpokemonInfo();
+    }
+
+    function renderpokemonInfo() {
+      document.getElementById('pokemonName').innerHTML = currentPokemon.name;
+      document.getElementById('spritesFrontDefault').src = currentPokemon.sprites.front_default;
+      document.getElementById('spritesFrontShiny').src = currentPokemon.sprites.front_shiny;
+      document.getElementById('spritesBackDefault').src = currentPokemon.sprites.back_default;
+      document.getElementById('spritesBackShiny').src = currentPokemon.sprites.back_shiny;
+
+    }
+  </script>
+
+</head>
+
+<body onload="loadPokemon()">
+  <div class="pokemon-wrapper">
+    <h1 id="pokemonName">Name</h1>
+
+    <div class="pokemon-sprites-wrapper">
+
+      <img id="spritesFrontDefault" src="" alt="Front default">
+      <img id="spritesFrontShiny" src="" alt="Front default">
+      <img id="spritesBackDefault" src="" alt="Front default">
+      <img id="spritesBackShiny" src="" alt="Front default">
+    </div>
+  </div>
+</body>
+
+</html>
