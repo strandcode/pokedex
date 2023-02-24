@@ -98,7 +98,7 @@ main {
 }
 
 .pokemon-type {
-  background-color: rgba(255, 255, 255, 0.267);
+  background-color: #ffffff44;
   padding: 6px 12px;
   border-radius: 15px;
   margin-top: 10px;
@@ -251,7 +251,7 @@ th {
 }
 
 .portrait-moves {
-  background-color: var(--poke-green);
+  background-color: var(--poke-bg-gray);
   border-radius: 5px;
   padding: 0 5px;
 }

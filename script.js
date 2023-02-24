@@ -1,19 +1,38 @@
 let allPokemons = [];
 
-let
+let pokemonTypeColors = {
+  "normal": "#A8A878",
+  "fighting": "#C03028",
+  "flying": "#A890F0",
+  "poison": "#A040A0",
+  "ground": "#E0C068",
+  "rock": "#B8A038",
+  "bug": "#A8B820",
+  "ghost": "#705898",
+  "steel": "#B8B8D0",
+  "fire": "#F08030",
+  "water": "#6890F0",
+  "grass": "#78C850",
+  "electric": "#F8D030",
+  "psychic": "#F85888",
+  "ice": "#98D8D8",
+  "dragon": "#7038F8",
+  "dark": "#705848",
+  "fairy": "#EE99AC"
+}
 
 
-  // NOTE Gets the pokemon data with the ids 1 - 20
-  async function loadPokemon() {
-    let currentPokemon;
-    for (let a = 1; a < 25; a++) {
-      let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
-      let response = await fetch(url);
-      currentPokemon = await response.json();
-      allPokemons.push(currentPokemon);
-    }
-    renderPokedexGallery();
+// NOTE Gets the pokemon data with the ids 1 - 20
+async function loadPokemon() {
+  let currentPokemon;
+  for (let a = 1; a < 25; a++) {
+    let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
+    let response = await fetch(url);
+    currentPokemon = await response.json();
+    allPokemons.push(currentPokemon);
   }
+  renderPokedexGallery();
+}
 
 function renderPokedexGallery() {
   let pokedexGallery = document.getElementById('pokedexGallery');
@@ -31,6 +50,12 @@ function renderPokemonTypes(i) {
     pokemonTypes.innerHTML += `
       <div class="pokemon-type">${upperCaseFirstChar(allPokemons[i].types[t].type.name)}</div>
     `;
+
+    if (allPokemons[i].types[0].type.name in pokemonTypeColors) {
+      let pokemonCard = document.getElementById('pokemonCard-' + i);
+      pokemonCard.style.backgroundColor = pokemonTypeColors[allPokemons[i].types[0].type.name];
+    }
+
   }
 }
 
@@ -77,9 +102,9 @@ function openPokemonPortrait(i) {
   let pokemonPortrait = document.getElementById('pokemonPortrait');
   pokemonPortrait.innerHTML = '';
   pokemonPortrait.classList.remove('d-none');
-  console.log(i);
+
   pokemonPortrait.innerHTML += /*html*/ `
-  <div class="pokemon-portrait-wrapper">
+  <div id="pokemonPortraitWrapper" class="pokemon-portrait-wrapper">
   <div class="pokemon-portrait-header">
     <div class="header-top">
       <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">arrow_back</span>
@@ -105,6 +130,10 @@ function openPokemonPortrait(i) {
 </div>
   `;
   renderPokemonPortraitBody(i);
+  if (allPokemons[i].types[0].type.name in pokemonTypeColors) {
+    let pokemonPortraitWrapper = document.getElementById('pokemonPortraitWrapper');
+    pokemonPortraitWrapper.style.backgroundColor = pokemonTypeColors[allPokemons[i].types[0].type.name];
+  }
 }
 
 
