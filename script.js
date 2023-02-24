@@ -3,7 +3,7 @@ let allPokemons = [];
 // NOTE Gets the pokemon data with the ids 1 - 20
 async function loadPokemon() {
   let currentPokemon;
-  for (let a = 1; a < 50; a++) {
+  for (let a = 1; a < 100; a++) {
     let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
     let response = await fetch(url);
     currentPokemon = await response.json();

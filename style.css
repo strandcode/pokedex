@@ -3,6 +3,9 @@ html {
   --poke-green: #49d0b1;
 }
 
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -88,4 +91,108 @@ main {
 
 .cp {
   cursor: pointer;
+}
+
+.pokemon-portrait-container {
+  background-color: rgb(102, 102, 102);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 15px;
+  display: flex;
+}
+
+.pokemon-portrait-wrapper {
+  min-height: 100px;
+  width: 100%;
+  background-color: var(--poke-orange);
+  color: white;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 5px 5px 9px 0px #00000078;
+  justify-content: space-between;
+}
+
+.pokemon-portrait-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  flex-direction: column;
+
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-wrapper {
+  width: 100%;
+  /* display: flex; */
+
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+  ;
+}
+
+.header-wrapper h2 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.pokemon-type-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.img-container {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.img-container img {
+  background-color: yellowgreen;
+  width: 200px;
+  height: 200px;
+}
+
+.pokemon-portrait-body {
+  background-color: white;
+  width: 100%;
+  min-height: 200px;
+  border-radius: 25px;
+  color: black;
+  padding: 15px;
+}
+
+
+td:first-child {
+  padding-right: 5px;
+}
+
+th {
+  width: 100%;
+  text-align: left;
+}
+
+.portrait-menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.active {
+  font-weight: 700;
 }
