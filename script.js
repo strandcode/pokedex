@@ -1,16 +1,19 @@
 let allPokemons = [];
 
-// NOTE Gets the pokemon data with the ids 1 - 20
-async function loadPokemon() {
-  let currentPokemon;
-  for (let a = 1; a < 4; a++) {
-    let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
-    let response = await fetch(url);
-    currentPokemon = await response.json();
-    allPokemons.push(currentPokemon);
+let
+
+
+  // NOTE Gets the pokemon data with the ids 1 - 20
+  async function loadPokemon() {
+    let currentPokemon;
+    for (let a = 1; a < 25; a++) {
+      let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
+      let response = await fetch(url);
+      currentPokemon = await response.json();
+      allPokemons.push(currentPokemon);
+    }
+    renderPokedexGallery();
   }
-  renderPokedexGallery();
-}
 
 function renderPokedexGallery() {
   let pokedexGallery = document.getElementById('pokedexGallery');
@@ -43,7 +46,7 @@ function templatePokemonCard(i) {
       <div class="pokemon-card-body">
         <div id="pokemonTypes-${i}" class="pokemon-type-wrapper">
         </div>
-        <img id="spritesFrontDefault" src="${allPokemons[i].sprites.front_default}" alt="Front default">
+        <img id="spritesFrontDefault" src="${allPokemons[i].sprites.other.home.front_default}" alt="Front default">
       </div>
     </div>
   `;
@@ -59,25 +62,33 @@ function upperCaseFirstChar(word) {
 function closePokemonPortrait() {
   let pokemonPortrait = document.getElementById('pokemonPortrait');
   pokemonPortrait.classList.add('d-none');
+  let pokedexGallery = document.getElementById('pokedexGallery');
+  pokedexGallery.classList.remove('d-none');
 }
 
 
+let activePortraitBodyMenu = 0;
+
 function openPokemonPortrait(i) {
+  activePortraitBodyMenu = 0
+  let pokedexGallery = document.getElementById('pokedexGallery');
+  pokedexGallery.classList.add('d-none');
+
   let pokemonPortrait = document.getElementById('pokemonPortrait');
   pokemonPortrait.innerHTML = '';
   pokemonPortrait.classList.remove('d-none');
   console.log(i);
-  pokemonPortrait.innerHTML += `
+  pokemonPortrait.innerHTML += /*html*/ `
   <div class="pokemon-portrait-wrapper">
   <div class="pokemon-portrait-header">
     <div class="header-top">
-      <img class="cp" src="img/arrow-left-2-48.png" alt="" onclick="closePokemonPortrait()">
-      <img class="cp" src="img/menu-4-48.png" alt="">
+      <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">arrow_back</span>
+      <span class="cp material-symbols-sharp" onclick="">favorite</span>
     </div>
     <div class="header-info">
       <div class="header-wrapper">
         <h2 id="pokemonName">${upperCaseFirstChar(allPokemons[i].name)}</h2>
-        <div class="pokemon-type-wrapper">
+        <div class="pokemon-portrait-type-wrapper">
           <div id="pokemonTypes-${i}" class="pokemon-type">#Grass</div>
           <div id="pokemonTypes-${i}" class="pokemon-type">#Poison</div>
         </div>
@@ -85,9 +96,9 @@ function openPokemonPortrait(i) {
       <div id="pokemonId" class="pokemon-id">#${allPokemons[i].id}
       </div>
     </div>
-  </div>
   <div class="img-container">
-    <img id="spritesFrontDefault" src="${allPokemons[i].sprites.front_default}" alt="Front default">
+    <img id="spritesFrontDefault" src="${allPokemons[i].sprites.other.home.front_default}" alt="Front default">
+  </div>
   </div>
   
   <div id="pokemonPortraitBody" class="pokemon-portrait-body"></div>
@@ -96,7 +107,6 @@ function openPokemonPortrait(i) {
   renderPokemonPortraitBody(i);
 }
 
-let activePortraitBodyMenu = 3;
 
 function changePortraitBodyMenu(newActiveMenu, i) {
   activePortraitBodyMenu = newActiveMenu;
@@ -160,11 +170,11 @@ function templateTablePortraitAbout(i) {
           <td class="no-data">0.70cm</td>
         </tr>
         <tr>
-          <td>Weight</td>
+          <td>Weight:</td>
           <td class="no-data">6,9kg</td>
         </tr>
         <tr>
-          <td>Abilities</td>
+          <td>Abilities:</td>
           <td id="aboutAbilities">Overgrow, Chlorophyl</td>
         </tr>
         <tr>
