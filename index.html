@@ -12,10 +12,11 @@
   <title>Pokedex</title>
 </head>
 
-<body onload="loadPokemn()">
+<body onload="loadPokemon()">
   <nav>
     <img class="cp" src="img/arrow-left-2-48.png" alt="">
     <h1>Pokédex</h1>
+    <img class="cp" src="img/menu-4-48.png" alt="">
 
   </nav>
   <main>
@@ -24,38 +25,29 @@
     <script src="script.js"></script>
   </main>
 
-  <div class="pokemon-portrait-container">
+  <!-- NOTE Portrait is rendered -->
+  <div id="pokemonPortrait" class="pokemon-portrait-container d-none">
 
-
-
-    <div id="pokemonPortrait-${i}" class="pokemon-portrait-wrapper" onclick="openPokemonCard()">
-
+    <!-- <div class="pokemon-portrait-wrapper">
       <div class="pokemon-portrait-header">
         <div class="header-top">
           <img class="cp" src="img/arrow-left-2-48.png" alt="">
           <img class="cp" src="img/menu-4-48.png" alt="">
         </div>
-
         <div class="header-info">
-
           <div class="header-wrapper">
             <h2 id="pokemonName">Bulabasaur</h2>
             <div class="pokemon-type-wrapper">
-
               <div id="pokemonTypes-${i}" class="pokemon-type">Grass</div>
               <div id="pokemonTypes-${i}" class="pokemon-type">Poison</div>
             </div>
           </div>
-
           <div id="pokemonId" class="pokemon-id">#001
           </div>
         </div>
-
       </div>
-
       <div class="img-container">
         <img id="spritesFrontDefault" src="http://placekitten.com/200/200" alt="Front default">
-
       </div>
       <div class="pokemon-portrait-body">
         <div class="portrait-menu">
@@ -64,8 +56,8 @@
           <span>Evolution</span>
           <span>Moves</span>
         </div>
-
         <hr>
+
         <table id="tablePortraitAbout">
           <tbody>
             <tr>
@@ -104,7 +96,10 @@
         </table>
 
       </div>
-    </div>
+    </div> -->
+
+
+
   </div>
 
 

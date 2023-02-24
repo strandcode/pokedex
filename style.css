@@ -152,7 +152,7 @@ main {
 
 .pokemon-type-wrapper {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
 }
 
 .img-container {
@@ -195,4 +195,13 @@ th {
 
 .active {
   font-weight: 700;
+}
+
+.d-none {
+  display: none;
+}
+
+.no-data {
+  color: grey;
+  font-style: italic;
 }
