@@ -96,20 +96,55 @@ function openPokemonPortrait(i) {
   renderPokemonPortraitBody(i);
 }
 
+let activePortraitBodyMenu = 3;
+
+function changePortraitBodyMenu(newActiveMenu, i) {
+  activePortraitBodyMenu = newActiveMenu;
+  renderPokemonPortraitBody(i);
+}
+
 function renderPokemonPortraitBody(i) {
   let pokemonPortraitBody = document.getElementById('pokemonPortraitBody');
   pokemonPortraitBody.innerHTML = '';
   pokemonPortraitBody.innerHTML += `
     <div class="portrait-menu">
-      <span class="active">About</span>
-      <span>Base Stats</span>
-      <span>Evolution</span>
-      <span>Moves</span>
+      <span id="PortraitBodyMenu-0" onclick="changePortraitBodyMenu(0, ${i})">About</span>
+      <span id="PortraitBodyMenu-1" onclick="changePortraitBodyMenu(1, ${i})">Base Stats</span>
+      <span id="PortraitBodyMenu-2" onclick="changePortraitBodyMenu(2, ${i})">Evolution</span>
+      <span id="PortraitBodyMenu-3" onclick="changePortraitBodyMenu(3, ${i})">Moves</span>
     </div>
     <hr>
   `;
-  pokemonPortraitBody.innerHTML += templateTablePortraitAbout(i);
-  renderAboutAbilities(i);
+
+  if (activePortraitBodyMenu == 0) {
+    document.getElementById('PortraitBodyMenu-0').classList.add('active');
+    pokemonPortraitBody.innerHTML += templateTablePortraitAbout(i);
+    renderAboutAbilities(i);
+  }
+  if (activePortraitBodyMenu == 3) {
+    document.getElementById('PortraitBodyMenu-3').classList.add('active');
+    pokemonPortraitBody.innerHTML += templatePortraitMoves(i);
+    renderPortraitMoves(i);
+  }
+}
+
+
+
+
+function templatePortraitMoves(i) {
+  return /*html*/ `
+  <div id="portraitMovesWrapper" class="portrait-moves-wrapper"></div>
+  `;
+}
+
+function renderPortraitMoves(i) {
+  let portraitMovesWrapper = document.getElementById('portraitMovesWrapper');
+  portraitMovesWrapper.innerHTML = '';
+  for (let m = 0; m < allPokemons[i].moves.length; m++) {
+    portraitMovesWrapper.innerHTML += /*html*/ `
+        <span class="portrait-moves">${upperCaseFirstChar(allPokemons[i].moves[m].move.name)}</span>
+    `;
+  }
 }
 
 function templateTablePortraitAbout(i) {
@@ -155,7 +190,6 @@ function templateTablePortraitAbout(i) {
 }
 
 function renderAboutAbilities(i) {
-  console.log('Hallo: ' + i);
   let aboutAbilities = document.getElementById('aboutAbilities');
   aboutAbilities.innerHTML = '';
   for (let x = 0; x < allPokemons[i].abilities.length; x++) {

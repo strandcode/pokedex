@@ -98,8 +98,8 @@ main {
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
   left: 0;
+  min-height: 100vh;
   padding: 15px;
   display: flex;
 }
@@ -163,15 +163,14 @@ main {
 }
 
 .img-container img {
-  background-color: yellowgreen;
-  width: 200px;
   height: 200px;
+  object-fit: cover;
 }
 
 .pokemon-portrait-body {
   background-color: white;
   width: 100%;
-  min-height: 200px;
+  min-height: 40vh;
   border-radius: 25px;
   color: black;
   padding: 15px;
@@ -197,11 +196,26 @@ th {
   font-weight: 700;
 }
 
-.d-none {
-  display: none;
-}
+
 
 .no-data {
   color: grey;
   font-style: italic;
+}
+
+.portrait-moves-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.portrait-moves {
+  background-color: var(--poke-green);
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+.d-none {
+  display: none;
 }
