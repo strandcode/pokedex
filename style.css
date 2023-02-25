@@ -25,6 +25,7 @@ nav {
   left: 0;
   right: 0;
   background-color: white;
+  z-index: 5;
 }
 
 h1 {
@@ -62,6 +63,15 @@ main {
   flex-direction: column;
   box-shadow: 5px 5px 9px 0px #00000078;
   max-width: 395px;
+  transition: all 125ms ease-in-out;
+}
+
+.pokemon-card-wrapper:hover {
+  cursor: pointer;
+  /* outline: 2px solid rgba(102, 51, 153, 0.26); */
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 9px 0px #00000078;
+  transition: all 125ms ease-in-out;
 }
 
 .pokemon-card-header {

@@ -25,7 +25,7 @@ let pokemonTypeColors = {
 // NOTE Gets the pokemon data with the ids 1 - 20
 async function loadPokemon() {
   let currentPokemon;
-  for (let a = 1; a < 25; a++) {
+  for (let a = 1; a < 21; a++) {
     let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
     let response = await fetch(url);
     currentPokemon = await response.json();
@@ -89,6 +89,7 @@ function closePokemonPortrait() {
   pokemonPortrait.classList.add('d-none');
   let pokedexGallery = document.getElementById('pokedexGallery');
   pokedexGallery.classList.remove('d-none');
+  document.getElementById('navbar').classList.remove('d-none');
 }
 
 
@@ -102,6 +103,8 @@ function openPokemonPortrait(i) {
   let pokemonPortrait = document.getElementById('pokemonPortrait');
   pokemonPortrait.innerHTML = '';
   pokemonPortrait.classList.remove('d-none');
+
+  document.getElementById('navbar').classList.add('d-none');
 
   pokemonPortrait.innerHTML += /*html*/ `
   <div id="pokemonPortraitWrapper" class="pokemon-portrait-wrapper">
