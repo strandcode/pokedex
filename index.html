@@ -18,8 +18,12 @@
     <span class="material-symbols-sharp">arrow_back</span>
     <h1>Pokédex</h1>
     <div class="nav-right-wrapper">
+
+      <input type="text" id="search" name="search" onkeydown="searchPokemon()" placeholder="Search for pokémon name">
+
       <span class="cp material-symbols-sharp">search</span>
       <span class="material-symbols-sharp">menu</span>
+      <div class="search-results d-none" id="searchResults"></div>
     </div>
   </nav>
   <main>

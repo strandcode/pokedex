@@ -59,6 +59,16 @@ function renderPokemonTypes(i) {
   }
 }
 
+function renderPokemonPortraitTypes(i) {
+  let pokemonTypes = document.getElementById('pokemonPortraitTypes-' + i);
+  pokemonTypes.innerHTML = '';
+  for (let t = 0; t < allPokemons[i].types.length; t++) {
+    pokemonTypes.innerHTML += `
+      <div class="pokemon-type">${upperCaseFirstChar(allPokemons[i].types[t].type.name)}</div>
+    `;
+  }
+}
+
 
 
 function templatePokemonCard(i) {
@@ -111,14 +121,12 @@ function openPokemonPortrait(i) {
   <div class="pokemon-portrait-header">
     <div class="header-top">
       <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">arrow_back</span>
-      <span class="cp material-symbols-sharp" onclick="">favorite</span>
+      <span class="cp material-symbols-sharp" onclick="likePokemonPortrait(${i})" id="pokemonPortraitLike-${i}">favorite</span>
     </div>
     <div class="header-info">
       <div class="header-wrapper">
         <h2 id="pokemonName">${upperCaseFirstChar(allPokemons[i].name)}</h2>
-        <div class="pokemon-portrait-type-wrapper">
-          <div id="pokemonTypes-${i}" class="pokemon-type">#Grass</div>
-          <div id="pokemonTypes-${i}" class="pokemon-type">#Poison</div>
+        <div id="pokemonPortraitTypes-${i}" class="pokemon-portrait-type-wrapper">
         </div>
       </div>
       <div id="pokemonId" class="pokemon-id">#${allPokemons[i].id}
@@ -132,6 +140,7 @@ function openPokemonPortrait(i) {
   <div id="pokemonPortraitBody" class="pokemon-portrait-body"></div>
 </div>
   `;
+  renderPokemonPortraitTypes(i);
   renderPokemonPortraitBody(i);
   if (allPokemons[i].types[0].type.name in pokemonTypeColors) {
     let pokemonPortraitWrapper = document.getElementById('pokemonPortraitWrapper');
@@ -150,10 +159,10 @@ function renderPokemonPortraitBody(i) {
   pokemonPortraitBody.innerHTML = '';
   pokemonPortraitBody.innerHTML += `
     <div class="portrait-menu">
-      <span id="PortraitBodyMenu-0" onclick="changePortraitBodyMenu(0, ${i})">About</span>
-      <span id="PortraitBodyMenu-1" onclick="changePortraitBodyMenu(1, ${i})">Base Stats</span>
-      <span id="PortraitBodyMenu-2" onclick="changePortraitBodyMenu(2, ${i})">Evolution</span>
-      <span id="PortraitBodyMenu-3" onclick="changePortraitBodyMenu(3, ${i})">Moves</span>
+      <span id="PortraitBodyMenu-0" class="cp" onclick="changePortraitBodyMenu(0, ${i})">About</span>
+      <span id="PortraitBodyMenu-1" class="cp" onclick="changePortraitBodyMenu(1, ${i})">Base Stats</span>
+      <span id="PortraitBodyMenu-2" class="cp" onclick="changePortraitBodyMenu(2, ${i})">Evolution</span>
+      <span id="PortraitBodyMenu-3" class="cp" onclick="changePortraitBodyMenu(3, ${i})">Moves</span>
     </div>
     <hr>
   `;
@@ -239,4 +248,38 @@ function renderAboutAbilities(i) {
       <span>${upperCaseFirstChar(allPokemons[i].abilities[x].ability.name)}</span>
     `;
   }
+}
+
+// ####################### Search Pokemon ################################
+
+function searchPokemon() {
+  let searchTerm = document.getElementById("search").value;
+  // NOTE neu gelernt
+  let matchingPokemons = allPokemons.filter(function (allPokemonsPosI) {
+    return allPokemonsPosI.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
+  });
+
+
+  let resultsList = document.getElementById("searchResults");
+  resultsList.classList.remove('d-none');
+  resultsList.innerHTML = "";
+  matchingPokemons.forEach(function (pokemon, i) {
+    const cardId = `pokemonCard-${allPokemons.indexOf(pokemon)}`;
+    resultsList.innerHTML += /*html*/ `
+      <a href="#${cardId}" onclick="focusCard('${cardId}')">${upperCaseFirstChar(pokemon.name)}</a>
+    `;
+  });
+}
+
+function focusCard(cardId) {
+  document.getElementById("search").value = '';
+  document.getElementById("searchResults").classList.add('d-none');
+  document.getElementById(cardId).focus();
+}
+
+
+// TODO onclick remove fill-icon
+function likePokemonPortrait(i) {
+  let pokemonPortraitLike = document.getElementById('pokemonPortraitLike-' + i);
+  pokemonPortraitLike.classList.add('fill-icon');
 }
