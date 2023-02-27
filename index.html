@@ -10,20 +10,19 @@
   <link rel="stylesheet" href="fonts/fonts.css">
   <link href="node_modules/material-symbols/index.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <title>Pokedex</title>
+  <title>Pokedex | sascha@strandco.de</title>
 </head>
 
 <body onload="loadPokemon()">
+  <!-- TODO Styling of navbar -->
   <nav id="navbar">
-    <span class="material-symbols-sharp">arrow_back</span>
     <h1>Pokédex</h1>
+    <div>
+      <span class="pokemonQuantities" id="pokemonQuantity"></span>
+      <span class="cp add-more" onclick="loadPokemon()">Add more!</span>
+    </div>
     <div class="nav-right-wrapper">
-
-      <input type="text" id="search" name="search" onkeydown="searchPokemon()" placeholder="Search for pokémon name">
-
-      <span class="cp material-symbols-sharp">search</span>
-      <span class="material-symbols-sharp">menu</span>
-      <div class="search-results d-none" id="searchResults"></div>
+      <input type="text" id="search" name="search" onkeydown="searchPokemon()" placeholder="Search for pokémon">
     </div>
   </nav>
   <main>

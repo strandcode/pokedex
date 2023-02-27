@@ -35,6 +35,22 @@ h1 {
   margin-block-end: 0;
 }
 
+.pokemonQuantities {
+  /* vertical-align: super; */
+  font-size: 1rem;
+}
+
+.add-more {
+  transition: all 125ms ease-in-out;
+}
+
+.add-more:hover {
+  color: #6890F0;
+  transform: translateY(-2px);
+  transition: all 125ms ease-in-out;
+  font-weight: 700;
+}
+
 main {
   margin-top: 100px;
 }

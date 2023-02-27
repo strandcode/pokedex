@@ -1,3 +1,4 @@
+let pokedexGallery = document.getElementById('pokedexGallery');
 let allPokemons = [];
 
 let pokemonTypeColors = {
@@ -21,21 +22,43 @@ let pokemonTypeColors = {
   "fairy": "#EE99AC"
 }
 
+// NOTE gelernt
+let totalQuantityOfPokemons;
+let apiIndexStart = 1;
+let apiIndexEnd = 26;
 
-// NOTE Gets the pokemon data with the ids 1 - 20
 async function loadPokemon() {
+  getTotalQuantityOfPokemons();
   let currentPokemon;
-  for (let a = 1; a < 21; a++) {
-    let url = 'https://pokeapi.co/api/v2/pokemon/' + a;
+  if (apiIndexEnd > totalQuantityOfPokemons) {
+    apiIndexEnd = totalQuantityOfPokemons + 1;
+  }
+  for (apiIndexStart; apiIndexStart < apiIndexEnd; apiIndexStart++) {
+    let url = 'https://pokeapi.co/api/v2/pokemon/' + apiIndexStart;
     let response = await fetch(url);
     currentPokemon = await response.json();
     allPokemons.push(currentPokemon);
   }
+  apiIndexEnd += 25;
   renderPokedexGallery();
 }
 
+async function getTotalQuantityOfPokemons() {
+  await fetch('https://pokeapi.co/api/v2/pokemon/')
+    .then(response => response.json())
+    .then(data => {
+      totalQuantityOfPokemons = data.count;
+    })
+    .catch(error => console.error(error));
+}
+
+
 function renderPokedexGallery() {
-  let pokedexGallery = document.getElementById('pokedexGallery');
+  let pokemonQuantity = document.getElementById('pokemonQuantity');
+
+  pokemonQuantity.innerHTML = `
+  You have <b>${allPokemons.length}</b> of <b>${totalQuantityOfPokemons}</b> Pokémons in your Pokédex.
+  `;
   pokedexGallery.innerHTML = '';
   for (let i = 0; i < allPokemons.length; i++) {
     pokedexGallery.innerHTML += templatePokemonCard(i);
@@ -50,12 +73,10 @@ function renderPokemonTypes(i) {
     pokemonTypes.innerHTML += `
       <div class="pokemon-type">${upperCaseFirstChar(allPokemons[i].types[t].type.name)}</div>
     `;
-
     if (allPokemons[i].types[0].type.name in pokemonTypeColors) {
       let pokemonCard = document.getElementById('pokemonCard-' + i);
       pokemonCard.style.backgroundColor = pokemonTypeColors[allPokemons[i].types[0].type.name];
     }
-
   }
 }
 
@@ -97,7 +118,6 @@ function upperCaseFirstChar(word) {
 function closePokemonPortrait() {
   let pokemonPortrait = document.getElementById('pokemonPortrait');
   pokemonPortrait.classList.add('d-none');
-  let pokedexGallery = document.getElementById('pokedexGallery');
   pokedexGallery.classList.remove('d-none');
   document.getElementById('navbar').classList.remove('d-none');
 }
@@ -106,8 +126,9 @@ function closePokemonPortrait() {
 let activePortraitBodyMenu = 0;
 
 function openPokemonPortrait(i) {
+  if (i < 0) { i = allPokemons.length - 1; }
+  if (i >= allPokemons.length) { i = 0; }
   activePortraitBodyMenu = 0
-  let pokedexGallery = document.getElementById('pokedexGallery');
   pokedexGallery.classList.add('d-none');
 
   let pokemonPortrait = document.getElementById('pokemonPortrait');
@@ -120,12 +141,18 @@ function openPokemonPortrait(i) {
   <div id="pokemonPortraitWrapper" class="pokemon-portrait-wrapper">
   <div class="pokemon-portrait-header">
     <div class="header-top">
-      <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">arrow_back</span>
-      <span class="cp material-symbols-sharp" onclick="likePokemonPortrait(${i})" id="pokemonPortraitLike-${i}">favorite</span>
+      <div>
+        <span class="cp material-symbols-sharp" onclick="openPokemonPortrait(${i - 1})">arrow_back</span>
+        <span class="cp material-symbols-sharp" onclick="openPokemonPortrait(${i + 1})">arrow_forward</span>
+      </div>
+      <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">close</span>
+      
     </div>
     <div class="header-info">
       <div class="header-wrapper">
-        <h2 id="pokemonName">${upperCaseFirstChar(allPokemons[i].name)}</h2>
+        <h2 id="pokemonName">${upperCaseFirstChar(allPokemons[i].name)}
+        <span class="cp material-symbols-sharp" onclick="likePokemonPortrait(${i})" id="pokemonPortraitLike-${i}">favorite</span>
+      </h2>
         <div id="pokemonPortraitTypes-${i}" class="pokemon-portrait-type-wrapper">
         </div>
       </div>
@@ -208,15 +235,15 @@ function templateTablePortraitAbout(i) {
         </tr>
         <tr>
           <td>Height:</td>
-          <td class="no-data">0.70cm</td>
+          <td>${allPokemons[i].height * 10}cm</td>
         </tr>
         <tr>
           <td>Weight:</td>
-          <td class="no-data">6,9kg</td>
+          <td>${allPokemons[i].weight / 10}kg</td>
         </tr>
         <tr>
           <td>Abilities:</td>
-          <td id="aboutAbilities">Overgrow, Chlorophyl</td>
+          <td id="aboutAbilities"></td>
         </tr>
         <tr>
           <th colspan="2">Breeding</th>
@@ -245,41 +272,29 @@ function renderAboutAbilities(i) {
   aboutAbilities.innerHTML = '';
   for (let x = 0; x < allPokemons[i].abilities.length; x++) {
     aboutAbilities.innerHTML += `
-      <span>${upperCaseFirstChar(allPokemons[i].abilities[x].ability.name)}</span>
+      <span>${upperCaseFirstChar(allPokemons[i].abilities[x].ability.name)},</span>
     `;
   }
+}
+
+function likePokemonPortrait(i) {
+  let pokemonPortraitLike = document.getElementById('pokemonPortraitLike-' + i);
+  pokemonPortraitLike.classList.toggle('fill-icon');
 }
 
 // ####################### Search Pokemon ################################
 
 function searchPokemon() {
+  pokedexGallery.innerHTML = '';
   let searchTerm = document.getElementById("search").value;
-  // NOTE neu gelernt
-  let matchingPokemons = allPokemons.filter(function (allPokemonsPosI) {
-    return allPokemonsPosI.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
-  });
-
-
-  let resultsList = document.getElementById("searchResults");
-  resultsList.classList.remove('d-none');
-  resultsList.innerHTML = "";
-  matchingPokemons.forEach(function (pokemon, i) {
-    const cardId = `pokemonCard-${allPokemons.indexOf(pokemon)}`;
-    resultsList.innerHTML += /*html*/ `
-      <a href="#${cardId}" onclick="focusCard('${cardId}')">${upperCaseFirstChar(pokemon.name)}</a>
-    `;
-  });
-}
-
-function focusCard(cardId) {
-  document.getElementById("search").value = '';
-  document.getElementById("searchResults").classList.add('d-none');
-  document.getElementById(cardId).focus();
+  for (let i = 0; i < allPokemons.length; i++) {
+    if (allPokemons[i].name.toLowerCase().includes(searchTerm.toLowerCase())
+      || allPokemons[i].types[0].type.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      pokedexGallery.innerHTML += templatePokemonCard(i);
+      renderPokemonTypes(i);
+    }
+  }
 }
 
 
-// TODO onclick remove fill-icon
-function likePokemonPortrait(i) {
-  let pokemonPortraitLike = document.getElementById('pokemonPortraitLike-' + i);
-  pokemonPortraitLike.classList.add('fill-icon');
-}
+// TODO Nur teilladen
