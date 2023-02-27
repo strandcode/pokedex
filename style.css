@@ -27,6 +27,8 @@ nav {
   right: 0;
   background-color: white;
   z-index: 5;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 h1 {
@@ -291,6 +293,35 @@ td:first-child {
 th {
   width: 100%;
   text-align: left;
+}
+
+.table-base-stats td:nth-child(1) {
+  min-width: 170px;
+}
+
+.table-base-stats td:nth-child(2) {
+  text-align: right;
+  font-weight: 700;
+  padding-right: 10px;
+}
+
+.table-base-stats td:nth-child(3) {
+  text-align: right;
+  font-weight: 700;
+  width: 100%;
+}
+
+
+.chart-base {
+  width: 100%;
+  background-color: lightgray;
+  height: .5rem;
+}
+
+.chart-value {
+  width: 50%;
+  background-color: red;
+  height: .5rem;
 }
 
 .portrait-menu {

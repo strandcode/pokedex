@@ -1,6 +1,8 @@
 let pokedexGallery = document.getElementById('pokedexGallery');
 let allPokemons = [];
 
+// TODO store allPokemons to localeStorage for better performance
+
 let pokemonTypeColors = {
   "normal": "#A8A878",
   "fighting": "#C03028",
@@ -199,6 +201,12 @@ function renderPokemonPortraitBody(i) {
     pokemonPortraitBody.innerHTML += templateTablePortraitAbout(i);
     renderAboutAbilities(i);
   }
+
+  if (activePortraitBodyMenu == 1) {
+    document.getElementById('PortraitBodyMenu-1').classList.add('active');
+    pokemonPortraitBody.innerHTML += templateTablePortraitBaseStats(i);
+  }
+
   if (activePortraitBodyMenu == 3) {
     document.getElementById('PortraitBodyMenu-3').classList.add('active');
     pokemonPortraitBody.innerHTML += templatePortraitMoves(i);
@@ -206,7 +214,104 @@ function renderPokemonPortraitBody(i) {
   }
 }
 
+function renderBaseStatsCharts() {
+  return /*html*/ `
+  <div class="chart-base">
+    <div class="chart-value"></div>
+  </div>
+  `;
+}
 
+// TODO das kann alles innerhalb einer Schleife gerendert werden!!
+
+function templateTablePortraitBaseStats(i) {
+  let totalStrength = 0;
+  for (let s = 0; s < allPokemons[i].stats.length; s++) {
+    totalStrength += allPokemons[i].stats[s].base_stat;
+  }
+  return /*html*/ `
+  <table class="table-base-stats">
+    <tr>
+      <td>Hitpoints</td>
+      <td>${allPokemons[i].stats[0].base_stat}</td>
+      <td>
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[0].base_stat / 140))}%">
+        </div>
+      </div>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td>Attack</td>
+      <td>${allPokemons[i].stats[1].base_stat}</td>
+      <td>
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[1].base_stat / 135))}%">
+        </div>
+      </div>
+
+      </td>
+    </tr>
+    <tr>
+      <td>Defense</td>
+      <td>${allPokemons[i].stats[2].base_stat}</td>
+      <td>
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[2].base_stat / 130))}%">
+        </div>
+      </div>
+
+      </td>
+    </tr>
+    <tr>
+      <td>Special Attack</td>
+      <td>${allPokemons[i].stats[3].base_stat}</td>
+      <td>
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[3].base_stat / 135))}%">
+        </div>
+      </div>
+
+      </td>
+    </tr>
+    <tr>
+      <td>Special Defense</td>
+      <td>${allPokemons[i].stats[4].base_stat}</td>
+      <td>
+
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[4].base_stat / 105))}%">
+        </div>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Speed</td>
+      <td>${allPokemons[i].stats[5].base_stat}</td>
+      <td>
+
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[5].base_stat / 120))}%">
+        </div>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Total Strength</td>
+      <td>${totalStrength}</td>
+      <td>
+      <div class="chart-base">
+        <div class="chart-value" style="width:${(100 * (totalStrength / 765))}%">
+        </div>
+      </div>
+
+      </td>
+    </tr>
+  </table>
+  `;
+}
 
 
 function templatePortraitMoves(i) {
