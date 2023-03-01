@@ -1,0 +1,21 @@
+.impressum h3,
+.impressum h2,
+.impressum h1 {
+  text-align: left;
+}
+
+.impressum a {
+  color: var(--btn-green);
+}
+
+.impressum a:hover {
+  text-decoration: underline var(--btn-green);
+}
+
+.generator {
+  margin: 40px 0 80px 0;
+}
+
+#privacy {
+  scroll-margin-top: 100px;
+}

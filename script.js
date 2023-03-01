@@ -1,8 +1,5 @@
 let pokedexGallery = document.getElementById('pokedexGallery');
 let allPokemons = [];
-
-// TODO store allPokemons to localeStorage for better performance
-
 let pokemonTypeColors = {
   "normal": "#A8A878",
   "fighting": "#C03028",
@@ -24,12 +21,10 @@ let pokemonTypeColors = {
   "fairy": "#EE99AC"
 }
 
-// NOTE gelernt
-let totalQuantityOfPokemons;
 let apiIndexStart = 1;
 let apiIndexEnd = 26;
 
-async function loadPokemon() {
+async function fetchPokemonsFromApi() {
   getTotalQuantityOfPokemons();
   let currentPokemon;
   if (apiIndexEnd > totalQuantityOfPokemons) {
@@ -45,6 +40,8 @@ async function loadPokemon() {
   renderPokedexGallery();
 }
 
+let totalQuantityOfPokemons;
+
 async function getTotalQuantityOfPokemons() {
   await fetch('https://pokeapi.co/api/v2/pokemon/')
     .then(response => response.json())
@@ -57,9 +54,9 @@ async function getTotalQuantityOfPokemons() {
 
 function renderPokedexGallery() {
   let pokemonQuantity = document.getElementById('pokemonQuantity');
-
   pokemonQuantity.innerHTML = `
-  You have <b>${allPokemons.length}</b> of <b>${totalQuantityOfPokemons}</b> Pokémons in your Pokédex.
+    You have <b>${allPokemons.length}</b> of <b>${totalQuantityOfPokemons}</b>
+    Pokémons in your Pokédex.
   `;
   pokedexGallery.innerHTML = '';
   for (let i = 0; i < allPokemons.length; i++) {
@@ -92,8 +89,6 @@ function renderPokemonPortraitTypes(i) {
   }
 }
 
-
-
 function templatePokemonCard(i) {
   return /*html*/ `
      <div id="pokemonCard-${i}" class="pokemon-card-wrapper" onclick="openPokemonPortrait(${i})">
@@ -110,12 +105,11 @@ function templatePokemonCard(i) {
   `;
 }
 
-
 function upperCaseFirstChar(word) {
-  const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
-  return capitalizedWord;
+  const words = word.split('-');
+  const capitalizedWords = words.map(w => w.charAt(0).toUpperCase() + w.slice(1));
+  return capitalizedWords.join('-');
 }
-
 
 function closePokemonPortrait() {
   let pokemonPortrait = document.getElementById('pokemonPortrait');
@@ -124,51 +118,21 @@ function closePokemonPortrait() {
   document.getElementById('navbar').classList.remove('d-none');
 }
 
-
 let activePortraitBodyMenu = 0;
 
 function openPokemonPortrait(i) {
   if (i < 0) { i = allPokemons.length - 1; }
   if (i >= allPokemons.length) { i = 0; }
-  activePortraitBodyMenu = 0
-  pokedexGallery.classList.add('d-none');
-
   let pokemonPortrait = document.getElementById('pokemonPortrait');
+  pokedexGallery.classList.add('d-none');
   pokemonPortrait.innerHTML = '';
   pokemonPortrait.classList.remove('d-none');
-
   document.getElementById('navbar').classList.add('d-none');
-
-  pokemonPortrait.innerHTML += /*html*/ `
-  <div id="pokemonPortraitWrapper" class="pokemon-portrait-wrapper">
-  <div class="pokemon-portrait-header">
-    <div class="header-top">
-      <div>
-        <span class="cp material-symbols-sharp" onclick="openPokemonPortrait(${i - 1})">arrow_back</span>
-        <span class="cp material-symbols-sharp" onclick="openPokemonPortrait(${i + 1})">arrow_forward</span>
-      </div>
-      <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">close</span>
-      
-    </div>
-    <div class="header-info">
-      <div class="header-wrapper">
-        <h2 id="pokemonName">${upperCaseFirstChar(allPokemons[i].name)}
-        <span class="cp material-symbols-sharp" onclick="likePokemonPortrait(${i})" id="pokemonPortraitLike-${i}">favorite</span>
-      </h2>
-        <div id="pokemonPortraitTypes-${i}" class="pokemon-portrait-type-wrapper">
-        </div>
-      </div>
-      <div id="pokemonId" class="pokemon-id">#${allPokemons[i].id}
-      </div>
-    </div>
-  <div class="img-container">
-    <img id="spritesFrontDefault" src="${allPokemons[i].sprites.other.home.front_default}" alt="Front default">
-  </div>
-  </div>
-  
-  <div id="pokemonPortraitBody" class="pokemon-portrait-body"></div>
-</div>
-  `;
+  let like = '';
+  if (allPokemons[i].like === true) {
+    like = 'fill-icon';
+  }
+  pokemonPortrait.innerHTML += templatePokemonPortraitHeader(i, like);
   renderPokemonPortraitTypes(i);
   renderPokemonPortraitBody(i);
   if (allPokemons[i].types[0].type.name in pokemonTypeColors) {
@@ -177,6 +141,38 @@ function openPokemonPortrait(i) {
   }
 }
 
+function templatePokemonPortraitHeader(i, like) {
+  return /*html*/ `
+    <div id="pokemonPortraitWrapper" class="pokemon-portrait-wrapper">
+      <div class="pokemon-portrait-header">
+        <div class="header-top">
+          <div>
+            <span class="cp material-symbols-sharp" onclick="openPokemonPortrait(${i - 1})">arrow_back</span>
+            <span class="cp material-symbols-sharp" onclick="openPokemonPortrait(${i + 1})">arrow_forward</span>
+          </div>
+          <span class="cp material-symbols-sharp" onclick="closePokemonPortrait()">close</span>
+        </div>
+        <div class="header-info">
+          <div class="header-wrapper">
+            <h2 id="pokemonName">${upperCaseFirstChar(allPokemons[i].name)}
+              <span class="cp material-symbols-sharp fs-2rem ${like}" 
+                onclick="likePokemonPortrait(${i})"
+                id="pokemonPortraitLike-${i}">favorite</span>
+            </h2>
+            <div id="pokemonPortraitTypes-${i}" class="pokemon-portrait-type-wrapper">
+            </div>
+          </div>
+          <div id="pokemonId" class="pokemon-id">#${allPokemons[i].id}
+          </div>
+        </div>
+        <div class="img-container">
+          <img id="spritesFrontDefault" src="${allPokemons[i].sprites.other.home.front_default}" alt="Front default">
+        </div>
+      </div>
+      <div id="pokemonPortraitBody" class="pokemon-portrait-body"></div>
+    </div>
+  `;
+}
 
 function changePortraitBodyMenu(newActiveMenu, i) {
   activePortraitBodyMenu = newActiveMenu;
@@ -186,15 +182,8 @@ function changePortraitBodyMenu(newActiveMenu, i) {
 function renderPokemonPortraitBody(i) {
   let pokemonPortraitBody = document.getElementById('pokemonPortraitBody');
   pokemonPortraitBody.innerHTML = '';
-  pokemonPortraitBody.innerHTML += `
-    <div class="portrait-menu">
-      <span id="PortraitBodyMenu-0" class="cp" onclick="changePortraitBodyMenu(0, ${i})">About</span>
-      <span id="PortraitBodyMenu-1" class="cp" onclick="changePortraitBodyMenu(1, ${i})">Base Stats</span>
-      <span id="PortraitBodyMenu-2" class="cp" onclick="changePortraitBodyMenu(2, ${i})">Evolution</span>
-      <span id="PortraitBodyMenu-3" class="cp" onclick="changePortraitBodyMenu(3, ${i})">Moves</span>
-    </div>
-    <hr>
-  `;
+  pokemonPortraitBody.innerHTML += templatePokemonPortraitBodyMenu(i);
+
 
   if (activePortraitBodyMenu == 0) {
     document.getElementById('PortraitBodyMenu-0').classList.add('active');
@@ -205,6 +194,7 @@ function renderPokemonPortraitBody(i) {
   if (activePortraitBodyMenu == 1) {
     document.getElementById('PortraitBodyMenu-1').classList.add('active');
     pokemonPortraitBody.innerHTML += templateTablePortraitBaseStats(i);
+    getChartValueWidth();
   }
 
   if (activePortraitBodyMenu == 3) {
@@ -214,105 +204,93 @@ function renderPokemonPortraitBody(i) {
   }
 }
 
-function renderBaseStatsCharts() {
+function templatePokemonPortraitBodyMenu(i) {
   return /*html*/ `
-  <div class="chart-base">
-    <div class="chart-value"></div>
-  </div>
+    <div class="portrait-menu">
+      <span id="PortraitBodyMenu-0" class="cp" onclick="changePortraitBodyMenu(0, ${i})">About</span>
+      <span id="PortraitBodyMenu-1" class="cp" onclick="changePortraitBodyMenu(1, ${i})">Base Stats</span>
+      <!--
+      <span id="PortraitBodyMenu-2" class="cp" onclick="changePortraitBodyMenu(2, ${i})">Evolution</span>
+      -->
+      <span id="PortraitBodyMenu-3" class="cp" onclick="changePortraitBodyMenu(3, ${i})">Moves</span>
+    </div>
+    <hr>
   `;
 }
 
-// TODO das kann alles innerhalb einer Schleife gerendert werden!!
+function renderTablePortraitBaseStats(i) {
+  const statLabels = ['Hitpoints', 'Attack', 'Defense', 'Special Attack', 'Special Defense', 'Speed'];
+  const statMaxValues = [140, 135, 130, 135, 105, 120, 1200];
+  tableRows = '';
+  totalStrength = 0;
+  for (let s = 0; s < allPokemons[i].stats.length; s++) {
+    const statValue = allPokemons[i].stats[s].base_stat;
+    const statLabel = statLabels[s];
+    const statMaxValue = statMaxValues[s];
+    totalStrength += statValue;
+    const statRow = templateTablePortraitBaseStatsRows(s, statLabel, statValue, statMaxValue);
+
+    tableRows += statRow;
+  }
+  return tableRows;
+}
+
+function templateTablePortraitBaseStatsRows(s, statLabel, statValue, statMaxValue) {
+  return /*html*/ `
+    <tr>
+      <td>${statLabel}</td>
+      <td>${statValue}</td>
+      <td>
+        <div class="chart-base">
+          <div id="chartValue-${s}" class="chart-value" style="width:${(100 * (statValue / statMaxValue))}%">
+          </div>
+        </div>
+      </td>
+    </tr>
+  `;
+}
+
+let totalStrength = 0;
+let tableRows = '';
 
 function templateTablePortraitBaseStats(i) {
-  let totalStrength = 0;
-  for (let s = 0; s < allPokemons[i].stats.length; s++) {
-    totalStrength += allPokemons[i].stats[s].base_stat;
-  }
+  renderTablePortraitBaseStats(i);
   return /*html*/ `
-  <table class="table-base-stats">
-    <tr>
-      <td>Hitpoints</td>
-      <td>${allPokemons[i].stats[0].base_stat}</td>
-      <td>
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[0].base_stat / 140))}%">
-        </div>
-      </div>
-
-
-      </td>
-    </tr>
-    <tr>
-      <td>Attack</td>
-      <td>${allPokemons[i].stats[1].base_stat}</td>
-      <td>
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[1].base_stat / 135))}%">
-        </div>
-      </div>
-
-      </td>
-    </tr>
-    <tr>
-      <td>Defense</td>
-      <td>${allPokemons[i].stats[2].base_stat}</td>
-      <td>
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[2].base_stat / 130))}%">
-        </div>
-      </div>
-
-      </td>
-    </tr>
-    <tr>
-      <td>Special Attack</td>
-      <td>${allPokemons[i].stats[3].base_stat}</td>
-      <td>
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[3].base_stat / 135))}%">
-        </div>
-      </div>
-
-      </td>
-    </tr>
-    <tr>
-      <td>Special Defense</td>
-      <td>${allPokemons[i].stats[4].base_stat}</td>
-      <td>
-
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[4].base_stat / 105))}%">
-        </div>
-      </div>
-      </td>
-    </tr>
-    <tr>
-      <td>Speed</td>
-      <td>${allPokemons[i].stats[5].base_stat}</td>
-      <td>
-
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (allPokemons[i].stats[5].base_stat / 120))}%">
-        </div>
-      </div>
-      </td>
-    </tr>
-    <tr>
-      <td>Total Strength</td>
-      <td>${totalStrength}</td>
-      <td>
-      <div class="chart-base">
-        <div class="chart-value" style="width:${(100 * (totalStrength / 765))}%">
-        </div>
-      </div>
-
-      </td>
-    </tr>
-  </table>
+    <table class="table-base-stats">
+      <tr>
+        <th colspan="3">Combat Experience</th>
+      </tr>
+      ${tableRows}
+      <tr>
+        <td>Total Strength</td>
+        <td>${totalStrength}</td>
+        <td>
+          <div class="chart-base">
+            <div id="chartValue-6" class="chart-value" style="width:${(100 * (totalStrength / 1200))}%">
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
   `;
 }
 
+function getChartValueWidth() {
+  for (let c = 0; c < 7; c++) {
+    let chartValue = document.getElementById('chartValue-' + c).style;
+    let chartValueWidth = chartValue.width;
+    chartValueWidth = parseInt(chartValueWidth);
+    if (chartValueWidth < 25) {
+      chartValue.backgroundColor = '#78C850';
+    } else if (chartValueWidth < 50) {
+      chartValue.backgroundColor = '#F8D030';
+    } else if (chartValueWidth < 75) {
+      chartValue.backgroundColor = '#F08030';
+    } else {
+      chartValue.backgroundColor = '#C03028';
+    }
+  }
+}
 
 function templatePortraitMoves(i) {
   return /*html*/ `
@@ -332,11 +310,10 @@ function renderPortraitMoves(i) {
 
 function templateTablePortraitAbout(i) {
   return /*html*/ `
-      <table id="tablePortraitAbout">
+    <table id="tablePortraitAbout">
       <tbody>
         <tr>
-          <td>Species:</td>
-          <td class="no-data">Seed</td>
+          <th colspan="2">Body Measurements</th>
         </tr>
         <tr>
           <td>Height:</td>
@@ -347,44 +324,41 @@ function templateTablePortraitAbout(i) {
           <td>${allPokemons[i].weight / 10}kg</td>
         </tr>
         <tr>
+          <th colspan="2">Abilities & Experience</th>
+        </tr>
+        <tr>
           <td>Abilities:</td>
           <td id="aboutAbilities"></td>
         </tr>
         <tr>
-          <th colspan="2">Breeding</th>
+          <td>Experience:</td>
+          <td>${allPokemons[i].base_experience}</td>
         </tr>
-        <tr>
-          <td>Gender:</td>
-          <td class="no-data">87,5% female, 12,5% male</td>
-        </tr>
-        <tr>
-          <td>Egg Groups:</td>
-          <td class="no-data">Monster</td>
-        </tr>
-        <tr>
-          <td>Egg Cycle:</td>
-          <td class="no-data">Grass</td>
-        </tr>
-
       </tbody>
     </table>
   `;
-
 }
 
 function renderAboutAbilities(i) {
   let aboutAbilities = document.getElementById('aboutAbilities');
   aboutAbilities.innerHTML = '';
   for (let x = 0; x < allPokemons[i].abilities.length; x++) {
-    aboutAbilities.innerHTML += `
-      <span>${upperCaseFirstChar(allPokemons[i].abilities[x].ability.name)},</span>
-    `;
+    let abilityName = upperCaseFirstChar(allPokemons[i].abilities[x].ability.name);
+    if (x === allPokemons[i].abilities.length - 1) {
+      // letztes Element der abilities-Liste: kein Komma hinzufügen
+      aboutAbilities.innerHTML += `<span>${abilityName}</span>`;
+    } else {
+      aboutAbilities.innerHTML += `<span>${abilityName}, </span>`;
+    }
   }
 }
 
 function likePokemonPortrait(i) {
   let pokemonPortraitLike = document.getElementById('pokemonPortraitLike-' + i);
-  pokemonPortraitLike.classList.toggle('fill-icon');
+  if (allPokemons) {
+    pokemonPortraitLike.classList.toggle('fill-icon');
+    allPokemons[i].like = allPokemons[i].like === undefined ? true : !allPokemons[i].like;
+  }
 }
 
 // ####################### Search Pokemon ################################
@@ -400,6 +374,3 @@ function searchPokemon() {
     }
   }
 }
-
-
-// TODO Nur teilladen

@@ -12,13 +12,12 @@
   <title>Pokedex | sascha@strandco.de</title>
 </head>
 
-<body onload="loadPokemon()">
-  <!-- TODO Styling and responsiveness of navbar -->
+<body onload="fetchPokemonsFromApi()">
   <nav id="navbar">
     <h1>Pokédex</h1>
     <div>
       <span class="pokemonQuantities" id="pokemonQuantity"></span>
-      <span class="cp add-more" onclick="loadPokemon()">Add more!</span>
+      <button class="cp add-more" onclick="fetchPokemonsFromApi()">Add more!</button>
     </div>
     <div class="nav-right-wrapper">
       <input type="text" id="search" name="search" onkeydown="searchPokemon()" placeholder="Search for pokémon">
@@ -34,6 +33,17 @@
   <div id="pokemonPortrait" class="pokemon-portrait-container d-none">
   </div>
 
+  <footer>
+    <div class="footer-left">
+      <span>Entwickelt 02/2023 von&nbsp;</span>
+      <a href="mailto:sascha@strandco.de">sascha@strandco.de</a>
+    </div>
+    <div class="footer-right">
+      <a href="impressum.html">Impressum</a>
+      <span>|</span>
+      <a href="impressum.html#privacy">Datenschutz</a>
+    </div>
+  </footer>
 </body>
 
 </html>
