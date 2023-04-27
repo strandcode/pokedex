@@ -35,9 +35,9 @@ async function fetchPokemonsFromApi() {
     let response = await fetch(url);
     currentPokemon = await response.json();
     allPokemons.push(currentPokemon);
+    renderPokedexGallery();
   }
   apiIndexEnd += 25;
-  renderPokedexGallery();
 }
 
 let totalQuantityOfPokemons;
@@ -365,12 +365,31 @@ function likePokemonPortrait(i) {
 
 function searchPokemon() {
   pokedexGallery.innerHTML = '';
-  let searchTerm = document.getElementById("search").value;
+  let searchTerm = document.getElementById("search").value.toLowerCase();
+  let found = false;
   for (let i = 0; i < allPokemons.length; i++) {
-    if (allPokemons[i].name.toLowerCase().includes(searchTerm.toLowerCase())
-      || allPokemons[i].types[0].type.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (allPokemons[i].name.toLowerCase().includes(searchTerm)
+      || allPokemons[i].id.toString().includes(searchTerm)
+      || allPokemons[i].types[0].type.name.toLowerCase().includes(searchTerm)
+      || allPokemons[i].types[0].type.name.toLowerCase().includes(searchTerm)
+      || (typeof allPokemons[i].types[1] !== 'undefined'
+        && allPokemons[i].types[1].type.name.toLowerCase().includes(searchTerm))
+    ) {
       pokedexGallery.innerHTML += templatePokemonCard(i);
       renderPokemonTypes(i);
+      found = true;
+    }
+  }
+  if (!found) {
+    if (searchTerm == 'hans') {
+      pokedexGallery.innerHTML = 'Nobody would really look for Hans!';
+    } else {
+      pokedexGallery.innerHTML = 'No matching Pokémon found!';
     }
   }
 }
+
+function resetSearchField() {
+  document.getElementById("search").value = '';
+}
+

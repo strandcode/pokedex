@@ -76,9 +76,10 @@ main {
 .nav-right-wrapper input {
   background-color: var(--poke-bg-gray);
   border: unset;
-  padding: 3px 6px;
+  padding: 5px 14px;
   font-family: 'Open Sans', sans-serif;
   width: 200px;
+  border-radius: 10px;
 }
 
 .nav-right-wrapper input:focus-visible {
