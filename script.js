@@ -139,6 +139,8 @@ function openPokemonPortrait(i) {
     let pokemonPortraitWrapper = document.getElementById('pokemonPortraitWrapper');
     pokemonPortraitWrapper.style.backgroundColor = pokemonTypeColors[allPokemons[i].types[0].type.name];
   }
+  isPortraitReady = true;
+  nextPokemonViaKeys(i);
 }
 
 function templatePokemonPortraitHeader(i, like) {
@@ -392,4 +394,52 @@ function searchPokemon() {
 function resetSearchField() {
   document.getElementById("search").value = '';
 }
+
+
+// FIXME Pfeiltasten hängt sich auf
+let isPortraitReady = false;
+
+function nextPokemonViaKeys(i) {
+  window.addEventListener('keyup', (event) => {
+    if (isPortraitReady && (event.code === 'ArrowLeft' || event.code === 'ArrowRight')) {
+      if (event.code === 'ArrowLeft') {
+        openPokemonPortrait(i - 1);
+      }
+      if (event.code === 'ArrowRight') {
+        openPokemonPortrait(i + 1);
+      }
+    }
+  });
+
+
+  closeOnClickByside();
+}
+
+
+function closeOnClickByside() {
+  const parent = document.querySelector('#pokemonPortrait');
+  const child = document.querySelector('#pokemonPortraitWrapper');
+
+  function handleClick(event) {
+    console.log(event);
+    console.log('Parent clicked!');
+    event.stopPropagation();
+  }
+
+
+
+  parent.addEventListener('click', handleClick);
+  child.addEventListener('click', () => console.log('Child clicked!'));
+
+
+}
+
+
+
+
+
+
+
+
+
 
