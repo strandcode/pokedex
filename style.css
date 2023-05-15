@@ -204,6 +204,8 @@ main {
   padding: 15px;
   display: flex;
   justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
 .pokemon-portrait-wrapper {
@@ -336,6 +338,9 @@ th {
   justify-content: center;
   flex-wrap: wrap;
   gap: 5px;
+  overflow-y: scroll;
+  overflow: auto;
+  max-height: 215px;
 }
 
 .portrait-moves {

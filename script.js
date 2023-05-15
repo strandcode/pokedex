@@ -141,6 +141,7 @@ function openPokemonPortrait(i) {
   }
   isPortraitReady = true;
   nextPokemonViaKeys(i);
+  closeOnClickByside();
 }
 
 function templatePokemonPortraitHeader(i, like) {
@@ -410,9 +411,6 @@ function nextPokemonViaKeys(i) {
       }
     }
   });
-
-
-  closeOnClickByside();
 }
 
 
@@ -420,18 +418,16 @@ function closeOnClickByside() {
   const parent = document.querySelector('#pokemonPortrait');
   const child = document.querySelector('#pokemonPortraitWrapper');
 
-  function handleClick(event) {
-    console.log(event);
-    console.log('Parent clicked!');
+  parent.addEventListener('click', (event) => {
     event.stopPropagation();
-  }
+    console.log('Parent clicked!');
+    closePokemonPortrait();
+  });
 
-
-
-  parent.addEventListener('click', handleClick);
-  child.addEventListener('click', () => console.log('Child clicked!'));
-
-
+  child.addEventListener('click', (event) => {
+    event.stopPropagation();
+    console.log('Child clicked!')
+  });
 }
 
 
